@@ -86,7 +86,9 @@ object MatrixFactorization {
         val Au = UIu * UIu.t + lambda * n_m(i) * DenseMatrix.eye[Double](UIu.rows)
         M(i, ::) := (inv(Au) * (UIu * (I_m(i) * R(::, i)))).toDenseVector.t
       }
-      diff = math.abs(loss - calculateLoss)
+      val lossOld = loss
+      loss = calculateLoss
+      diff = math.abs(loss - lossOld)
       println(s"Diff: $diff")
       if (itr != 1 && (diff < tolerance || itr >= maxIteration)) {
         val R_hat = U * M.t
